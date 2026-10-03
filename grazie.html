@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Grazie / Tack — Italienska Skolan Stockholm</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Raleway:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --isk-navy: #20325C; --isk-blue: #4060A8; --isk-band-ink: #2E4880;
+    --isk-band-bg: #E9F1FB; --isk-bg: #F3F6FB; --isk-surface: #FFFFFF;
+    --isk-text: #20325C; --isk-muted: #5C6678; --isk-border: #D5DEEC; --isk-radius: 12px;
+    --font-head: 'Poppins', 'Raleway', 'Helvetica Neue', Arial, sans-serif;
+    --font-body: 'Raleway', 'Helvetica Neue', Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--isk-bg); color: var(--isk-text); font-family: var(--font-body);
+    font-size: 16px; line-height: 1.5; -webkit-font-smoothing: antialiased;
+  }
+  .pi-wrap { max-width: 640px; margin: 0 auto; padding: 48px 16px 80px; }
+  .pi-banner {
+    background: var(--isk-band-bg); border-radius: var(--isk-radius); padding: 20px 24px;
+    display: flex; align-items: center; gap: 16px; margin-bottom: 24px;
+  }
+  .pi-banner img.logo { height: 52px; width: auto; }
+  .pi-banner h1 {
+    font-family: var(--font-head); font-weight: 700; color: var(--isk-band-ink);
+    font-size: 22px; margin: 0;
+  }
+  .pi-card {
+    background: var(--isk-surface); border: 1px solid var(--isk-border);
+    border-radius: var(--isk-radius); padding: 40px 28px; text-align: center;
+  }
+  .pi-check {
+    width: 64px; height: 64px; border-radius: 50%; background: var(--isk-band-bg);
+    display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;
+    font-size: 32px; color: var(--isk-navy);
+  }
+  .pi-card h2 { font-family: var(--font-head); color: var(--isk-navy); font-size: 24px; margin: 0 0 12px; }
+  .pi-card p { color: var(--isk-text); margin: 0 0 24px; font-size: 16px; }
+  .pi-btn {
+    font-family: var(--font-head); font-weight: 600; font-size: 15px; border-radius: 8px;
+    padding: 12px 22px; cursor: pointer; border: none; text-decoration: none; display: inline-block;
+  }
+  .pi-btn-primary { background: var(--isk-blue); color: #fff; }
+  .pi-btn-primary:hover { filter: brightness(1.08); }
+  .pi-btn-secondary { background: transparent; color: var(--isk-blue); border: 1px solid var(--isk-blue); }
+  .pi-actions { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+</style>
+</head>
+<body>
+<div class="pi-wrap">
+  <div class="pi-banner">
+    <img class="logo" src="logo-italienska-skolan.png" alt="Italienska Skolan Stockholm"
+         onerror="this.style.display='none'" />
+    <h1 id="pi-title">Pre-iscrizioni / Intresseanmälan</h1>
+  </div>
+  <div class="pi-card">
+    <div class="pi-check">✓</div>
+    <h2 id="pi-heading">Grazie!</h2>
+    <p id="pi-message">Abbiamo ricevuto la tua pre-iscrizione. Ti contatteremo presto.</p>
+    <div class="pi-actions">
+      <a class="pi-btn pi-btn-primary" href="https://www.italienskaskolan.se/" id="pi-home">Vai a italienskaskolan.se</a>
+      <a class="pi-btn pi-btn-secondary" href="pre-iscrizioni.html" id="pi-again">Invia un'altra pre-iscrizione</a>
+    </div>
+  </div>
+</div>
+<script>
+  var TXT = {
+    it: {
+      title: 'Pre-iscrizioni / Intresseanmälan',
+      heading: 'Grazie!',
+      message: 'Abbiamo ricevuto la tua pre-iscrizione. Ti contatteremo presto. A breve riceverai un\'email di conferma.',
+      home: 'Vai a italienskaskolan.se',
+      again: 'Invia un\'altra pre-iscrizione',
+    },
+    sv: {
+      title: 'Intresseanmälan / Pre-iscrizioni',
+      heading: 'Tack!',
+      message: 'Vi har mottagit din intresseanmälan. Vi kontaktar dig snart. Du får snart ett bekräftelsemail.',
+      home: 'Gå till italienskaskolan.se',
+      again: 'Skicka en ny intresseanmälan',
+    }
+  };
+  var params = new URLSearchParams(location.search);
+  var lang = params.get('lang');
+  if (lang !== 'it' && lang !== 'sv') {
+    try { lang = sessionStorage.getItem('piLang') || 'it'; } catch (e) { lang = 'it'; }
+  }
+  var x = TXT[lang] || TXT.it;
+  document.documentElement.lang = lang;
+  document.getElementById('pi-title').textContent = x.title;
+  document.getElementById('pi-heading').textContent = x.heading;
+  document.getElementById('pi-message').textContent = x.message;
+  document.getElementById('pi-home').textContent = x.home;
+  document.getElementById('pi-again').textContent = x.again;
+</script>
+</body>
+</html>

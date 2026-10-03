@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Pre-iscrizioni / Intresseanmälan — Italienska Skolan Stockholm</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Raleway:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  /* ---------------------------------------------------------------
+     BRAND TOKENS — Italienska Skolan Stockholm.
+     Shared with the Scuola del Sabato form: royal blue (#4060A8)
+     wordmark + constellation, light sky-blue (#78B0E0) accent, deep
+     navy for headings/text, light-blue band for the header/info notes.
+     Headline font is TT Firs Neue (not freely hostable); fallback stack
+     is Poppins / Raleway, used here too.
+     --------------------------------------------------------------- */
+  :root {
+    --isk-navy:      #20325C;
+    --isk-blue:      #4060A8;
+    --isk-blue-soft: #78B0E0;
+    --isk-blue-pale: #B9D2EE;
+    --isk-red:       #D33A3A;
+    --isk-band-ink:  #2E4880;
+    --isk-band-bg:   #E9F1FB;
+    --isk-bg:        #F3F6FB;
+    --isk-surface:   #FFFFFF;
+    --isk-text:      #20325C;
+    --isk-muted:     #5C6678;
+    --isk-border:    #D5DEEC;
+    --isk-error:     #D33A3A;
+    --isk-radius:    12px;
+    --isk-space:     8px;
+    --font-head: 'Poppins', 'Raleway', 'Helvetica Neue', Arial, sans-serif;
+    --font-body: 'Raleway', 'Helvetica Neue', Arial, sans-serif;
+  }
+
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--isk-bg);
+    color: var(--isk-text);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .pi-wrap { max-width: 860px; margin: 0 auto; padding: 24px 16px 80px; }
+
+  /* Header banner */
+  .pi-back {
+    display: inline-block; margin-bottom: 14px; color: var(--isk-blue);
+    text-decoration: none; font-size: 14px; font-weight: 600;
+  }
+  .pi-back:hover { text-decoration: underline; }
+  .pi-banner {
+    background: var(--isk-band-bg);
+    border-radius: var(--isk-radius);
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .pi-banner img.logo { height: 56px; width: auto; }
+  .pi-banner h1 {
+    font-family: var(--font-head);
+    font-weight: 700;
+    color: var(--isk-band-ink);
+    font-size: 26px;
+    margin: 0;
+  }
+
+  /* Sections */
+  .pi-section {
+    background: var(--isk-surface);
+    border: 1px solid var(--isk-border);
+    border-radius: var(--isk-radius);
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+  .pi-section > h2 {
+    font-family: var(--font-head);
+    font-weight: 600;
+    color: var(--isk-navy);
+    font-size: 20px;
+    margin: 0 0 4px;
+  }
+  .pi-section > .pi-section-sub {
+    color: var(--isk-muted);
+    font-size: 14px;
+    margin: 0 0 16px;
+  }
+
+  /* Fields */
+  .pi-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .pi-field { display: flex; flex-direction: column; margin-bottom: 16px; }
+  .pi-field[hidden] { display: none; }
+  .pi-field.full { grid-column: 1 / -1; }
+  .pi-field label {
+    font-weight: 600;
+    font-size: 14px;
+    margin-bottom: 6px;
+    color: var(--isk-text);
+  }
+  .pi-field label .req { color: var(--isk-red); margin-left: 2px; }
+  .pi-field .hint { color: var(--isk-muted); font-size: 13px; margin-top: 4px; }
+  .pi-field input[type="text"],
+  .pi-field input[type="email"],
+  .pi-field input[type="tel"],
+  .pi-field select,
+  .pi-field textarea {
+    font-family: var(--font-body);
+    font-size: 15px;
+    padding: 10px 12px;
+    border: 1px solid var(--isk-border);
+    border-radius: 8px;
+    background: #fff;
+    color: var(--isk-text);
+    width: 100%;
+  }
+  .pi-field textarea { min-height: 70px; resize: vertical; }
+  .pi-field input[type="checkbox"],
+  .pi-field input[type="radio"] { width: auto; }
+  .pi-field input:focus,
+  .pi-field select:focus,
+  .pi-field textarea:focus {
+    outline: none;
+    border-color: var(--isk-blue);
+    box-shadow: 0 0 0 3px rgba(58, 77, 166, 0.15);
+  }
+  .pi-field.invalid input,
+  .pi-field.invalid select,
+  .pi-field.invalid textarea { border-color: var(--isk-error); }
+  .pi-error { color: var(--isk-error); font-size: 13px; margin-top: 4px; display: none; }
+  .pi-field.invalid .pi-error { display: block; }
+
+  .pi-info-note {
+    background: var(--isk-band-bg); border: 1px solid #C5D8F0; color: var(--isk-band-ink);
+    border-radius: 8px; padding: 12px 14px; font-size: 14px; line-height: 1.5;
+  }
+
+  /* Custom date control (Giorno / Mese / Anno searchable combos) */
+  .pi-date { display: flex; gap: 6px; }
+  .pi-combo { position: relative; }
+  .pi-combo[data-seg="day"]   { flex: 0 0 74px; }
+  .pi-combo[data-seg="month"] { flex: 1 1 auto; min-width: 0; }
+  .pi-combo[data-seg="year"]  { flex: 0 0 82px; }
+  .pi-combo input { padding-left: 10px; padding-right: 8px; }
+  .pi-combo input { width: 100%; }
+  .pi-combo-list {
+    position: absolute; top: calc(100% + 4px); left: 0; right: 0; z-index: 30;
+    list-style: none; margin: 0; padding: 4px; max-height: 230px; overflow-y: auto;
+    background: #fff; border: 1px solid var(--isk-border); border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(31, 42, 107, 0.14); display: none;
+  }
+  .pi-combo-list.show { display: block; }
+  .pi-combo-opt { padding: 8px 10px; border-radius: 6px; cursor: pointer; font-size: 15px; }
+  .pi-combo-opt:hover, .pi-combo-opt.active { background: var(--isk-band-bg); }
+
+  /* Radio / checkbox groups */
+  .pi-choice-group { display: flex; flex-direction: column; gap: 10px; }
+  .pi-choice-group.inline { flex-direction: row; flex-wrap: wrap; gap: 16px; align-items: center; }
+  .pi-choice-group label {
+    font-weight: 400; display: flex; align-items: flex-start; gap: 8px; margin: 0; cursor: pointer;
+    font-size: 15px; line-height: 1.4;
+  }
+  .pi-choice-group input { margin-top: 3px; }
+
+  /* Child block */
+  .pi-child {
+    border: 1px solid var(--isk-border);
+    border-left: 4px solid var(--isk-blue);
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 16px;
+    background: #fcfdff;
+  }
+  .pi-child-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+  .pi-child-head h3 {
+    font-family: var(--font-head);
+    font-size: 16px;
+    color: var(--isk-navy);
+    margin: 0;
+  }
+
+  /* Buttons */
+  .pi-btn {
+    font-family: var(--font-head);
+    font-weight: 600;
+    font-size: 15px;
+    border-radius: 8px;
+    padding: 12px 22px;
+    cursor: pointer;
+    border: none;
+    transition: filter .15s ease, background .15s ease;
+  }
+  .pi-btn-primary { background: var(--isk-blue); color: #fff; }
+  .pi-btn-primary:hover { filter: brightness(1.08); }
+  .pi-btn-secondary {
+    background: transparent;
+    color: var(--isk-blue);
+    border: 1px solid var(--isk-blue);
+  }
+  .pi-btn-secondary:hover { background: rgba(58,77,166,0.06); }
+  .pi-btn-ghost-danger {
+    background: transparent; color: var(--isk-red);
+    border: none; font-size: 13px; cursor: pointer; padding: 4px 8px;
+  }
+  .pi-btn[disabled] { opacity: .55; cursor: not-allowed; }
+
+  .pi-consent { display: flex; gap: 10px; align-items: flex-start; font-size: 14px; }
+  .pi-consent input { margin-top: 3px; }
+
+  .pi-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 8px; }
+  .pi-form-status { margin-top: 16px; font-size: 14px; }
+  .pi-form-status.err { color: var(--isk-error); }
+  .pi-form-status.ok { color: #2e7d32; }
+
+  /* Language selector at the top */
+  .pi-lang-field { max-width: 320px; }
+  .pi-helper-lines { font-size: 13px; color: var(--isk-muted); margin: 0 0 10px; line-height: 1.5; }
+
+  @media (max-width: 640px) {
+    .pi-grid { grid-template-columns: 1fr; }
+    .pi-banner h1 { font-size: 21px; }
+  }
+</style>
+</head>
+<body>
+<div class="pi-wrap">
+
+  <a class="pi-back" href="https://www.italienskaskolan.se/" data-i18n="back">← Torna a italienskaskolan.se</a>
+
+  <!-- HEADER -->
+  <div class="pi-banner">
+    <img class="logo" src="logo-italienska-skolan.png" alt="Italienska Skolan Stockholm"
+         onerror="this.style.display='none'" />
+    <h1 data-i18n="title">Pre-iscrizioni / Intresseanmälan</h1>
+  </div>
+
+  <!-- LANGUAGE SELECTOR -->
+  <div class="pi-section">
+    <p class="pi-helper-lines">
+      <span>Se desideri compilare il formulario in italiano, scegli «Italiano» nel campo sottostante.</span><br />
+      <span>Om du vill fylla i formuläret på svenska, välj «Svenska» i fältet nedan.</span>
+    </p>
+    <div class="pi-field pi-lang-field" style="margin-bottom:0">
+      <label for="pi-lang" data-i18n="langLabel">Lingua del modulo / Formulärets språk</label>
+      <select id="pi-lang">
+        <option value="it">Italiano</option>
+        <option value="sv">Svenska</option>
+      </select>
+    </div>
+  </div>
+
+  <form id="pi-form" novalidate>
+
+    <!-- ============ GUARDIAN 1 ============ -->
+    <div class="pi-section">
+      <h2 data-i18n="guardian1">Tutore 1</h2>
+      <div class="pi-grid">
+        <div class="pi-field">
+          <label data-i18n="guardianName">Nome e Cognome <span class="req">*</span></label>
+          <input type="text" name="g1_name" required />
+          <div class="pi-error" data-i18n="errRequired">Campo obbligatorio.</div>
+        </div>
+        <div class="pi-field">
+          <label data-i18n="emailLabel">Email <span class="req">*</span></label>
+          <input type="email" name="g1_email" required placeholder="nome@esempio.com" />
+          <div class="pi-error" data-i18n="errEmail">Inserisci un'email valida.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ GUARDIAN 2 (optional) ============ -->
+    <div class="pi-section">
+      <h2 data-i18n="guardian2">Tutore 2</h2>
+      <div class="pi-grid">
+        <div class="pi-field">
+          <label data-i18n="guardianNameOpt">Nome e Cognome</label>
+          <input type="text" name="g2_name" />
+        </div>
+        <div class="pi-field">
+          <label data-i18n="emailLabelOpt">Email</label>
+          <input type="email" name="g2_email" placeholder="nome@esempio.com" />
+          <div class="pi-error" data-i18n="errEmail">Inserisci un'email valida.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ CHILDREN ============ -->
+    <div class="pi-section">
+      <h2 data-i18n="childSection">Dati del bambino</h2>
+      <p class="pi-section-sub" data-i18n="childSectionSub">Aggiungi un blocco per ogni bambino/a.</p>
+      <div id="pi-children"></div>
+      <button type="button" class="pi-btn pi-btn-secondary" id="pi-add-child" data-i18n="addChild">+ Aggiungi un bambino/a</button>
+    </div>
+
+    <!-- ============ GDPR + SUBMIT ============ -->
+    <div class="pi-section">
+      <h2 data-i18n="gdprTitle">Trattamento dei dati personali (GDPR)</h2>
+      <div class="pi-info-note" data-i18n="gdprText">
+        Inviando questa pre-iscrizione, autorizzate il trattamento dei vostri dati personali. La vostra
+        fiducia è importante per noi: dal 25 maggio 2018 si applica il Regolamento generale sulla protezione
+        dei dati (GDPR), e ogni trattamento dei dati personali avviene in conformità ai requisiti stabiliti
+        dalla normativa.
+      </div>
+      <div class="pi-field full" style="margin-top:16px">
+        <label class="pi-consent">
+          <input type="checkbox" name="consent" required />
+          <span data-i18n="consentText">Acconsento al trattamento dei dati personali secondo l'informativa sulla privacy (GDPR). <span class="req">*</span></span>
+        </label>
+        <div class="pi-error" data-i18n="errConsent">È necessario il consenso per procedere.</div>
+      </div>
+
+      <div class="pi-actions">
+        <button type="submit" class="pi-btn pi-btn-primary" id="pi-submit" data-i18n="submit">Invia</button>
+      </div>
+      <div class="pi-form-status" id="pi-status"></div>
+    </div>
+
+  </form>
+</div>
+
+<!-- Hidden template for one child block -->
+<template id="pi-child-template">
+  <div class="pi-child" data-child>
+    <div class="pi-child-head">
+      <h3><span data-i18n="childNum">Bambino</span> <span class="pi-child-num"></span></h3>
+      <button type="button" class="pi-btn-ghost-danger" data-remove-child data-i18n="removeChild">✕ Rimuovi</button>
+    </div>
+
+    <div class="pi-grid">
+      <div class="pi-field">
+        <label data-i18n="childName">Nome <span class="req">*</span></label>
+        <input type="text" data-field="name" required />
+        <div class="pi-error" data-i18n="errRequired">Campo obbligatorio.</div>
+      </div>
+      <div class="pi-field">
+        <label data-i18n="dob">Data di Nascita <span class="req">*</span></label>
+        <div class="pi-date" data-date>
+          <div class="pi-combo" data-seg="day">
+            <input type="text" inputmode="numeric" autocomplete="off" data-combo-input data-i18n-ph="phDay" placeholder="Giorno" aria-label="Giorno" />
+            <ul class="pi-combo-list" data-combo-list></ul>
+          </div>
+          <div class="pi-combo" data-seg="month">
+            <input type="text" autocomplete="off" data-combo-input data-i18n-ph="phMonth" placeholder="Mese" aria-label="Mese" />
+            <ul class="pi-combo-list" data-combo-list></ul>
+          </div>
+          <div class="pi-combo" data-seg="year">
+            <input type="text" inputmode="numeric" autocomplete="off" data-combo-input data-i18n-ph="phYear" placeholder="Anno" aria-label="Anno" />
+            <ul class="pi-combo-list" data-combo-list></ul>
+          </div>
+        </div>
+        <input type="hidden" data-field="dob" required />
+        <div class="pi-error" data-i18n="errDob">Inserisci una data di nascita completa.</div>
+      </div>
+      <div class="pi-field full">
+        <label data-i18n="municipality">Comune di Residenza <span class="req">*</span></label>
+        <input type="text" data-field="municipality" required />
+        <div class="pi-error" data-i18n="errRequired">Campo obbligatorio.</div>
+      </div>
+
+      <div class="pi-field full">
+        <div class="pi-info-note" data-i18n="scenarioIntro">
+          Secondo la legge scolastica svedese, Italienska Skolan Stockholm darà priorità agli studenti che
+          risiedono in Svezia per un periodo limitato (gruppo target primario). Selezionate l'opzione che
+          corrisponde al vostro caso:
+        </div>
+      </div>
+      <div class="pi-field full">
+        <label data-i18n="scenario">Scenario <span class="req">*</span></label>
+        <div class="pi-choice-group" data-scenario-group></div>
+        <div class="pi-error" data-i18n="errRequired">Campo obbligatorio.</div>
+      </div>
+
+      <div class="pi-field full">
+        <label data-i18n="languagesHome">Quali lingue parlate quotidianamente in casa? (indicare tutte le lingue) <span class="req">*</span></label>
+        <div class="pi-choice-group inline" data-langs-group></div>
+        <div class="pi-error" data-i18n="errLangs">Seleziona almeno una lingua.</div>
+      </div>
+      <div class="pi-field full" data-other-lang-field hidden>
+        <label data-i18n="otherLangLabel">Specifica altre lingue</label>
+        <input type="text" data-field="other_languages" />
+        <div class="pi-error" data-i18n="errRequired">Campo obbligatorio.</div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+/* =====================================================================
+   CONFIG
+   ===================================================================== */
+const PI_CONFIG = {
+  // Apps Script web-app deployment URL (doPost). Paste after deploying.
+  appsScriptUrl: 'https://script.google.com/macros/s/AKfycbyBfXXLeZPhhGjeFMyTUvFIuDY5C92P6NmL6m5xeLPJNcpvFaNwMD-Xzy6_gEeJK9koSA/exec',
+  maxChildren: 8,
+  // On success, redirect to this bilingual thank-you page (language passed via ?lang=).
+  thankYouUrl: 'grazie.html',
+};
+
+/* Scenario options — canonical id + IT/SV labels. (In the original Cognito form the
+   IT and SV option orders differed; here they share one order.) */
+const SCENARIOS = [
+  { id: 's1',
+    it: 'Il bambino abita in Svezia per un periodo limitato.',
+    sv: 'Barn som bor i Sverige under en begränsad tid.' },
+  { id: 's2',
+    it: "Il bambino ha frequentato una scuola (dell'infanzia o primaria) in Italia o all'estero per un lungo periodo e desidera completare la sua istruzione in Svezia.",
+    sv: 'Barn som har gått länge i en skola i Italien eller utomlands och vill slutföra sin utbildning i Sverige.' },
+  { id: 's3',
+    it: 'La famiglia intende lasciare la Svezia per un periodo prolungato.',
+    sv: 'Barn där det finns skäl att anta att de kommer lämna Sverige under en längre period.' },
+  { id: 's4',
+    it: "Il bambino usa quotidianamente l'italiano con uno o entrambi i genitori e possiede competenze linguistiche sufficienti per seguire l'insegnamento in italiano.",
+    sv: 'Barn som talar italienska dagligen med en eller båda vårdnadshavarna och har tillräckliga språkkunskaper för att följa undervisningen.' },
+];
+
+/* Languages spoken at home — canonical id + IT/SV labels. "other" reveals a text field. */
+const HOME_LANGS = [
+  { id: 'italiano', it: 'Italiano', sv: 'Italienska' },
+  { id: 'svedese',  it: 'Svedese',  sv: 'Svenska' },
+  { id: 'altre',    it: 'Altre',    sv: 'Annat' },
+];
+
+/* Full i18n dictionary. data-i18n keys map to these; months drive the date combo. */
+const I18N = {
+  it: {
+    back: '← Torna a italienskaskolan.se',
+    title: 'Pre-iscrizioni / Intresseanmälan',
+    langLabel: 'Lingua del modulo / Formulärets språk',
+    guardian1: 'Tutore 1',
+    guardian2: 'Tutore 2',
+    guardianName: 'Nome e Cognome <span class="req">*</span>',
+    guardianNameOpt: 'Nome e Cognome',
+    emailLabel: 'Email <span class="req">*</span>',
+    emailLabelOpt: 'Email',
+    childSection: 'Dati del bambino',
+    childSectionSub: 'Aggiungi un blocco per ogni bambino/a che vuoi pre-iscrivere.',
+    childNum: 'Bambino',
+    childName: 'Nome <span class="req">*</span>',
+    dob: 'Data di Nascita <span class="req">*</span>',
+    municipality: 'Comune di Residenza <span class="req">*</span>',
+    scenarioIntro: "Secondo la legge scolastica svedese, Italienska Skolan Stockholm darà priorità agli studenti che risiedono in Svezia per un periodo limitato (gruppo target primario). Selezionate l'opzione che corrisponde al vostro caso:",
+    scenario: 'Scenario <span class="req">*</span>',
+    languagesHome: 'Quali lingue parlate quotidianamente in casa? (indicare tutte le lingue) <span class="req">*</span>',
+    otherLangLabel: 'Specifica altre lingue <span class="req">*</span>',
+    gdprTitle: 'Trattamento dei dati personali (GDPR)',
+    gdprText: "Inviando questa pre-iscrizione, autorizzate il trattamento dei vostri dati personali. La vostra fiducia è importante per noi: dal 25 maggio 2018 si applica il Regolamento generale sulla protezione dei dati (GDPR), e ogni trattamento dei dati personali avviene in conformità ai requisiti stabiliti dalla normativa.",
+    consentText: "Acconsento al trattamento dei dati personali secondo l'informativa sulla privacy della Italienska Skolan Stockholm (GDPR). <span class=\"req\">*</span>",
+    addChild: '+ Aggiungi un bambino/a',
+    removeChild: '✕ Rimuovi',
+    submit: 'Invia',
+    submitting: 'Invio in corso…',
+    phDay: 'Giorno', phMonth: 'Mese', phYear: 'Anno', phSelect: 'Seleziona…',
+    errRequired: 'Campo obbligatorio.',
+    errEmail: "Inserisci un'email valida.",
+    errDob: 'Inserisci una data di nascita completa.',
+    errLangs: 'Seleziona almeno una lingua.',
+    errConsent: 'È necessario il consenso per procedere.',
+    addChildFirst: 'Aggiungi almeno un bambino/a.',
+    submitError: "Si è verificato un errore durante l'invio. Riprova o contatta la scuola.",
+    months: ['Gennaio','Febbraio','Marzo','Aprile','Maggio','Giugno','Luglio','Agosto','Settembre','Ottobre','Novembre','Dicembre'],
+  },
+  sv: {
+    back: '← Tillbaka till italienskaskolan.se',
+    title: 'Intresseanmälan / Pre-iscrizioni',
+    langLabel: 'Formulärets språk / Lingua del modulo',
+    guardian1: 'Vårdnadshavare 1',
+    guardian2: 'Vårdnadshavare 2',
+    guardianName: 'Förnamn och Efternamn <span class="req">*</span>',
+    guardianNameOpt: 'Förnamn och Efternamn',
+    emailLabel: 'E-post <span class="req">*</span>',
+    emailLabelOpt: 'E-post',
+    childSection: 'Barnets uppgifter',
+    childSectionSub: 'Lägg till ett block för varje barn du vill anmäla.',
+    childNum: 'Barn',
+    childName: 'Namn <span class="req">*</span>',
+    dob: 'Födelsedatum <span class="req">*</span>',
+    municipality: 'Folkbokföringskommun <span class="req">*</span>',
+    scenarioIntro: 'Enligt den svenska skollagen ger Italienska Skolan Stockholm prioritet till elever som är bosatta i Sverige under en begränsad tid (primär målgrupp). Välj det alternativ som motsvarar er situation:',
+    scenario: 'Scenario <span class="req">*</span>',
+    languagesHome: 'Vilka språk talar ni dagligen hemma? (ange alla språk) <span class="req">*</span>',
+    otherLangLabel: 'Ange andra språk <span class="req">*</span>',
+    gdprTitle: 'Behandling av personuppgifter (GDPR)',
+    gdprText: 'Genom att skicka in denna föranmälan godkänner ni behandlingen av era personuppgifter. Ert förtroende är viktigt för oss: sedan den 25 maj 2018 gäller Dataskyddsförordningen (GDPR), och all behandling av personuppgifter sker i enlighet med de krav som fastställs i regelverket.',
+    consentText: 'Jag godkänner behandlingen av personuppgifter enligt Italienska Skolan Stockholms integritetspolicy (GDPR). <span class="req">*</span>',
+    addChild: '+ Lägg till ett barn',
+    removeChild: '✕ Ta bort',
+    submit: 'Skicka',
+    submitting: 'Skickar…',
+    phDay: 'Dag', phMonth: 'Månad', phYear: 'År', phSelect: 'Välj…',
+    errRequired: 'Obligatoriskt fält.',
+    errEmail: 'Ange en giltig e-postadress.',
+    errDob: 'Ange ett fullständigt födelsedatum.',
+    errLangs: 'Välj minst ett språk.',
+    errConsent: 'Samtycke krävs för att fortsätta.',
+    addChildFirst: 'Lägg till minst ett barn.',
+    submitError: 'Ett fel uppstod när formuläret skickades. Försök igen eller kontakta skolan.',
+    months: ['Januari','Februari','Mars','April','Maj','Juni','Juli','Augusti','September','Oktober','November','December'],
+  },
+};
+
+/* ===================================================================== */
+let LANG = 'it';
+const t = (key) => (I18N[LANG] && I18N[LANG][key] != null) ? I18N[LANG][key] : (I18N.it[key] || '');
+
+const childrenEl = document.getElementById('pi-children');
+const tmpl = document.getElementById('pi-child-template');
+let childCount = 0;
+let piUid = 0;
+
+/* -------- Apply the current language to every tagged element -------- */
+function applyLanguage(root) {
+  root = root || document;
+  root.querySelectorAll('[data-i18n]').forEach((el) => {
+    const v = t(el.getAttribute('data-i18n'));
+    if (v != null) el.innerHTML = v;
+  });
+  root.querySelectorAll('[data-i18n-ph]').forEach((el) => {
+    const v = t(el.getAttribute('data-i18n-ph'));
+    if (v != null) el.placeholder = v;
+  });
+  if (root === document) {
+    document.documentElement.lang = LANG;
+    document.getElementById('pi-submit').textContent = t('submit');
+    // Re-label scenario / language options + date months in every existing child block.
+    childrenEl.querySelectorAll('[data-child]').forEach(relabelChild);
+  }
+}
+
+function relabelChild(node) {
+  node.querySelectorAll('[data-scenario-opt]').forEach((span) => {
+    const s = SCENARIOS.find((x) => x.id === span.getAttribute('data-scenario-opt'));
+    if (s) span.textContent = s[LANG];
+  });
+  node.querySelectorAll('[data-lang-opt]').forEach((span) => {
+    const l = HOME_LANGS.find((x) => x.id === span.getAttribute('data-lang-opt'));
+    if (l) span.textContent = l[LANG];
+  });
+  // Refresh the date combos' month labels + placeholders for the new language.
+  if (node._dateCtl) node._dateCtl.relabel();
+}
+
+/* -------- Searchable combobox (type to filter, click to pick) -------- */
+function makeCombo(comboEl, options, onSelect) {
+  const input = comboEl.querySelector('[data-combo-input]');
+  const list = comboEl.querySelector('[data-combo-list]');
+  let opts = options.slice();
+  let selectedValue = '';
+  let activeIndex = -1;
+
+  const labelOf = (v) => { const o = opts.find((x) => x.value === v); return o ? o.label : ''; };
+
+  function render(filter) {
+    const f = (filter || '').trim().toLowerCase();
+    const filtered = opts.filter((o) => o.label.toLowerCase().includes(f) || o.value.toLowerCase().startsWith(f));
+    list.innerHTML = '';
+    filtered.forEach((o) => {
+      const li = document.createElement('li');
+      li.className = 'pi-combo-opt';
+      li.textContent = o.label;
+      li.dataset.value = o.value;
+      li.addEventListener('mousedown', (e) => { e.preventDefault(); choose(o); });
+      list.appendChild(li);
+    });
+    list.classList.toggle('show', filtered.length > 0);
+    activeIndex = -1;
+  }
+  function choose(o) {
+    selectedValue = o.value;
+    input.value = o.label;
+    list.classList.remove('show');
+    onSelect(o.value);
+  }
+  function resetInput() { selectedValue = ''; input.value = ''; }
+  function highlight(items) {
+    items.forEach((it, i) => it.classList.toggle('active', i === activeIndex));
+    if (items[activeIndex]) items[activeIndex].scrollIntoView({ block: 'nearest' });
+  }
+
+  input.addEventListener('focus', () => render(''));
+  input.addEventListener('input', () => render(input.value));
+  input.addEventListener('blur', () => setTimeout(() => {
+    list.classList.remove('show');
+    const typed = input.value.trim().toLowerCase();
+    if (!typed) { if (selectedValue) { resetInput(); onSelect(''); } return; }
+    const exact = opts.find((o) => o.label.toLowerCase() === typed || o.value.toLowerCase() === typed);
+    if (exact) { choose(exact); return; }
+    const matches = opts.filter((o) => o.label.toLowerCase().includes(typed) || o.value.toLowerCase().startsWith(typed));
+    if (matches.length === 1) choose(matches[0]);
+    else input.value = labelOf(selectedValue);
+  }, 150));
+  input.addEventListener('keydown', (e) => {
+    const items = Array.from(list.querySelectorAll('.pi-combo-opt'));
+    if (e.key === 'ArrowDown') { e.preventDefault(); if (!list.classList.contains('show')) render(input.value); activeIndex = Math.min(activeIndex + 1, items.length - 1); highlight(items); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); activeIndex = Math.max(activeIndex - 1, 0); highlight(items); }
+    else if (e.key === 'Enter') { if (activeIndex >= 0 && items[activeIndex]) { e.preventDefault(); choose(opts.find((o) => o.value === items[activeIndex].dataset.value)); } }
+    else if (e.key === 'Escape') { list.classList.remove('show'); }
+  });
+
+  return {
+    setOptions(newOpts) { opts = newOpts.slice(); if (selectedValue && !opts.find((o) => o.value === selectedValue)) resetInput(); },
+    relabelSelected() { if (selectedValue) input.value = labelOf(selectedValue); },
+    setPlaceholder(ph) { input.placeholder = ph; },
+    clear() { resetInput(); },
+    getValue() { return selectedValue; },
+  };
+}
+
+function initDateControl(node) {
+  const root = node.querySelector('[data-date]');
+  const hidden = node.querySelector('[data-field="dob"]');
+  const state = { day: '', month: '', year: '' };
+
+  const monthOptions = () => I18N[LANG].months.map((m, i) => ({ value: String(i + 1), label: m }));
+  const yearOptions = [];
+  const nowYear = new Date().getFullYear();
+  for (let y = nowYear; y >= nowYear - 22; y--) yearOptions.push({ value: String(y), label: String(y) });
+  const daysInMonth = (m, y) => (m ? new Date(Number(y || 2024), Number(m), 0).getDate() : 31);
+  const dayOptions = () => {
+    const n = daysInMonth(state.month, state.year), arr = [];
+    for (let d = 1; d <= n; d++) arr.push({ value: String(d), label: String(d) });
+    return arr;
+  };
+
+  function syncHidden() {
+    hidden.value = (state.day && state.month && state.year)
+      ? state.year + '-' + String(state.month).padStart(2, '0') + '-' + String(state.day).padStart(2, '0')
+      : '';
+    hidden.dispatchEvent(new Event('change'));
+  }
+  function refreshDays() {
+    const maxD = daysInMonth(state.month, state.year);
+    if (state.day && Number(state.day) > maxD) { state.day = ''; dayCtl.clear(); }
+    dayCtl.setOptions(dayOptions());
+  }
+
+  const dayCtl = makeCombo(root.querySelector('[data-seg="day"]'), dayOptions(), (v) => { state.day = v; syncHidden(); });
+  const monthCtl = makeCombo(root.querySelector('[data-seg="month"]'), monthOptions(), (v) => { state.month = v; refreshDays(); syncHidden(); });
+  const yearCtl = makeCombo(root.querySelector('[data-seg="year"]'), yearOptions, (v) => { state.year = v; refreshDays(); syncHidden(); });
+
+  // Expose a relabel hook so switching language updates month names + placeholders.
+  node._dateCtl = {
+    relabel() {
+      monthCtl.setOptions(monthOptions());
+      monthCtl.relabelSelected();
+      root.querySelector('[data-seg="day"] [data-combo-input]').placeholder = t('phDay');
+      root.querySelector('[data-seg="month"] [data-combo-input]').placeholder = t('phMonth');
+      root.querySelector('[data-seg="year"] [data-combo-input]').placeholder = t('phYear');
+    }
+  };
+}
+
+/* -------- Build one child block -------- */
+function addChild() {
+  if (childCount >= PI_CONFIG.maxChildren) return;
+  const node = tmpl.content.firstElementChild.cloneNode(true);
+
+  // Scenario radios (unique group name per child)
+  const scenName = 'scenario_' + (piUid);
+  const scenGroup = node.querySelector('[data-scenario-group]');
+  SCENARIOS.forEach((s) => {
+    const label = document.createElement('label');
+    label.innerHTML = '<input type="radio" name="' + scenName + '" data-field="scenario" value="' + s.id + '" />' +
+      '<span data-scenario-opt="' + s.id + '"></span>';
+    scenGroup.appendChild(label);
+  });
+
+  // Home-language checkboxes
+  const langGroup = node.querySelector('[data-langs-group]');
+  HOME_LANGS.forEach((l) => {
+    const label = document.createElement('label');
+    label.innerHTML = '<input type="checkbox" data-field="lang" value="' + l.id + '" />' +
+      '<span data-lang-opt="' + l.id + '"></span>';
+    langGroup.appendChild(label);
+  });
+  piUid++;
+
+  // Custom date-of-birth control
+  initDateControl(node);
+
+  // "Altre / Annat" reveals the free-text specify field
+  const otherField = node.querySelector('[data-other-lang-field]');
+  node.querySelectorAll('[data-field="lang"]').forEach((cb) => {
+    cb.addEventListener('change', () => {
+      const other = node.querySelector('[data-field="lang"][value="altre"]');
+      const on = other && other.checked;
+      otherField.hidden = !on;
+      if (!on) { const inp = otherField.querySelector('[data-field="other_languages"]'); if (inp) inp.value = ''; otherField.classList.remove('invalid'); }
+      node.querySelector('[data-langs-group]').closest('.pi-field').classList.remove('invalid');
+    });
+  });
+
+  // Remove button
+  node.querySelector('[data-remove-child]').addEventListener('click', () => {
+    node.remove();
+    renumberChildren();
+  });
+
+  childrenEl.appendChild(node);
+  childCount++;
+  relabelChild(node);       // fill scenario/lang option text + month labels for current language
+  applyLanguage(node);      // translate the static data-i18n labels inside the block
+  if (node._dateCtl) node._dateCtl.relabel();
+  renumberChildren();
+  document.getElementById('pi-add-child').disabled = childCount >= PI_CONFIG.maxChildren;
+}
+
+function renumberChildren() {
+  const blocks = childrenEl.querySelectorAll('[data-child]');
+  childCount = blocks.length;
+  blocks.forEach((b, i) => { b.querySelector('.pi-child-num').textContent = i + 1; });
+  blocks.forEach((b) => {
+    b.querySelector('[data-remove-child]').style.visibility = blocks.length > 1 ? 'visible' : 'hidden';
+  });
+  document.getElementById('pi-add-child').disabled = childCount >= PI_CONFIG.maxChildren;
+}
+
+/* -------- Collect + validate -------- */
+function collectChildren() {
+  return Array.from(childrenEl.querySelectorAll('[data-child]')).map((b) => {
+    const val = (f) => { const el = b.querySelector('[data-field="' + f + '"]'); return el ? el.value.trim() : ''; };
+    const scenarioId = (b.querySelector('[data-field="scenario"]:checked') || {}).value || '';
+    const scen = SCENARIOS.find((s) => s.id === scenarioId);
+    const langs = Array.from(b.querySelectorAll('[data-field="lang"]:checked')).map((cb) => cb.value);
+    return {
+      name: val('name'),
+      dob: val('dob'),
+      municipality: val('municipality'),
+      scenarioId: scenarioId,
+      scenarioLabel: scen ? scen.it : '',      // store the canonical Italian label
+      scenarioLabelLocal: scen ? scen[LANG] : '',
+      languages: langs.map((id) => (HOME_LANGS.find((l) => l.id === id) || {}).it || id),
+      languageIds: langs,
+      otherLanguages: langs.indexOf('altre') !== -1 ? val('other_languages') : '',
+    };
+  });
+}
+
+function markInvalid(el, on) {
+  const field = el.closest('.pi-field');
+  if (field) field.classList.toggle('invalid', on);
+}
+
+function validate() {
+  let firstInvalid = null;
+  const form = document.getElementById('pi-form');
+  form.querySelectorAll('.pi-field.invalid').forEach((f) => f.classList.remove('invalid'));
+
+  const emailOk = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());
+
+  // Guardian 1 (required)
+  if (!form.g1_name.value.trim()) { markInvalid(form.g1_name, true); firstInvalid = firstInvalid || form.g1_name; }
+  if (!emailOk(form.g1_email.value)) { markInvalid(form.g1_email, true); firstInvalid = firstInvalid || form.g1_email; }
+  // Guardian 2 (optional — only validate email format if provided)
+  if (form.g2_email.value.trim() && !emailOk(form.g2_email.value)) { markInvalid(form.g2_email, true); firstInvalid = firstInvalid || form.g2_email; }
+
+  if (childCount === 0) {
+    setStatus(t('addChildFirst'), 'err');
+    firstInvalid = firstInvalid || document.getElementById('pi-add-child');
+  }
+
+  childrenEl.querySelectorAll('[data-child]').forEach((b) => {
+    const nameEl = b.querySelector('[data-field="name"]');
+    if (!nameEl.value.trim()) { markInvalid(nameEl, true); firstInvalid = firstInvalid || nameEl; }
+    const dobEl = b.querySelector('[data-field="dob"]');
+    if (!dobEl.value.trim()) { markInvalid(dobEl, true); firstInvalid = firstInvalid || dobEl; }
+    const muniEl = b.querySelector('[data-field="municipality"]');
+    if (!muniEl.value.trim()) { markInvalid(muniEl, true); firstInvalid = firstInvalid || muniEl; }
+    // Scenario radio required
+    if (!b.querySelector('[data-field="scenario"]:checked')) {
+      b.querySelector('[data-scenario-group]').closest('.pi-field').classList.add('invalid');
+      firstInvalid = firstInvalid || b.querySelector('[data-field="scenario"]');
+    }
+    // At least one home language
+    const langs = b.querySelectorAll('[data-field="lang"]:checked');
+    if (!langs.length) {
+      b.querySelector('[data-langs-group]').closest('.pi-field').classList.add('invalid');
+      firstInvalid = firstInvalid || b.querySelector('[data-field="lang"]');
+    }
+    // "Altre" checked → specify field required
+    const other = b.querySelector('[data-field="lang"][value="altre"]');
+    if (other && other.checked) {
+      const inp = b.querySelector('[data-field="other_languages"]');
+      if (!inp.value.trim()) { markInvalid(inp, true); firstInvalid = firstInvalid || inp; }
+    }
+  });
+
+  // GDPR consent
+  if (!form.consent.checked) {
+    form.consent.closest('.pi-field').classList.add('invalid');
+    firstInvalid = firstInvalid || form.consent;
+  }
+
+  if (firstInvalid) {
+    const field = firstInvalid.closest('.pi-field') || firstInvalid;
+    field.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return false;
+  }
+  return true;
+}
+
+function setStatus(msg, kind) {
+  const el = document.getElementById('pi-status');
+  el.textContent = msg;
+  el.className = 'pi-form-status ' + (kind || '');
+}
+
+function buildPayload() {
+  const form = document.getElementById('pi-form');
+  return {
+    formLanguage: LANG,
+    guardian1: { name: form.g1_name.value.trim(), email: form.g1_email.value.trim() },
+    guardian2: { name: form.g2_name.value.trim(), email: form.g2_email.value.trim() },
+    children: collectChildren(),
+    consent: form.consent.checked,
+    submittedAt: new Date().toISOString(),
+  };
+}
+
+/* -------- Submit -------- */
+document.getElementById('pi-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  setStatus('', '');
+  if (!validate()) return;
+
+  const submitBtn = document.getElementById('pi-submit');
+  submitBtn.disabled = true;
+  submitBtn.textContent = t('submitting');
+
+  try {
+    const payload = buildPayload();
+
+    if (!PI_CONFIG.appsScriptUrl || PI_CONFIG.appsScriptUrl.startsWith('PASTE_')) {
+      console.log('PreIscrizioni payload (no backend configured yet):', payload);
+      setStatus('Backend non ancora configurato — payload registrato nella console del browser.', 'err');
+      submitBtn.disabled = false;
+      submitBtn.textContent = t('submit');
+      return;
+    }
+
+    const res = await fetch(PI_CONFIG.appsScriptUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // avoids a CORS preflight
+      body: JSON.stringify(payload),
+    });
+    const data = await res.json().catch(() => ({}));
+    if (data && data.ok) {
+      try { sessionStorage.setItem('piLang', LANG); } catch (e) {}
+      window.location.href = PI_CONFIG.thankYouUrl + '?lang=' + encodeURIComponent(LANG);
+    } else {
+      throw new Error((data && data.error) || 'Errore sconosciuto');
+    }
+  } catch (err) {
+    console.error(err);
+    setStatus(t('submitError') + ' (' + err.message + ')', 'err');
+    submitBtn.disabled = false;
+    submitBtn.textContent = t('submit');
+  }
+});
+
+document.getElementById('pi-add-child').addEventListener('click', addChild);
+
+// Language switch
+document.getElementById('pi-lang').addEventListener('change', (e) => {
+  LANG = e.target.value === 'sv' ? 'sv' : 'it';
+  applyLanguage(document);
+});
+
+// Start with the top-level labels + one child block
+applyLanguage(document);
+addChild();
+</script>
+</body>
+</html>

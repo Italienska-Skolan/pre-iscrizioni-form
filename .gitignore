@@ -1,0 +1,13 @@
+# Local-only files — kept out of the public GitHub Pages repo
+# Apps Script backend — never publish server code
+*.gs
+CLAUDE.md
+HANDOVER.md
+.claude/
+.DS_Store
+*.local
+
+# Local email samples / docs tooling
+esempi-email/
+node_modules/
+*.docx
