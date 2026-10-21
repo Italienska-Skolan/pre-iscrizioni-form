@@ -364,10 +364,16 @@
         <input type="hidden" data-field="dob" required />
         <div class="pi-error" data-i18n="errDob">Inserisci una data di nascita completa.</div>
       </div>
-      <div class="pi-field full">
+      <div class="pi-field">
         <label data-i18n="municipality">Comune di Residenza <span class="req">*</span></label>
         <input type="text" data-field="municipality" required />
         <div class="pi-error" data-i18n="errRequired">Campo obbligatorio.</div>
+      </div>
+      <div class="pi-field">
+        <label data-i18n="postcode">Postnummer (codice postale)</label>
+        <input type="text" data-field="postcode" inputmode="numeric" autocomplete="postal-code" maxlength="6" placeholder="112 34" />
+        <div class="hint" data-i18n="postcodeHint">Facoltativo — ci aiuta a scegliere dove aprire la scuola.</div>
+        <div class="pi-error" data-i18n="errPostcode">Inserisci un postnummer di 5 cifre (es. 112 34).</div>
       </div>
 
       <div class="pi-field full">
@@ -451,6 +457,8 @@ const I18N = {
     childName: 'Nome <span class="req">*</span>',
     dob: 'Data di Nascita <span class="req">*</span>',
     municipality: 'Comune di Residenza <span class="req">*</span>',
+    postcode: 'Postnummer (codice postale)',
+    postcodeHint: 'Facoltativo — ci aiuta a scegliere dove aprire la scuola.',
     scenarioIntro: "Secondo la legge scolastica svedese, Italienska Skolan Stockholm darà priorità agli studenti che risiedono in Svezia per un periodo limitato (gruppo target primario). Selezionate l'opzione che corrisponde al vostro caso:",
     scenario: 'Scenario <span class="req">*</span>',
     languagesHome: 'Quali lingue parlate quotidianamente in casa? (indicare tutte le lingue) <span class="req">*</span>',
@@ -467,6 +475,7 @@ const I18N = {
     errEmail: "Inserisci un'email valida.",
     errDob: 'Inserisci una data di nascita completa.',
     errLangs: 'Seleziona almeno una lingua.',
+    errPostcode: 'Inserisci un postnummer di 5 cifre (es. 112 34).',
     errConsent: 'È necessario il consenso per procedere.',
     addChildFirst: 'Aggiungi almeno un bambino/a.',
     submitError: "Si è verificato un errore durante l'invio. Riprova o contatta la scuola.",
@@ -488,6 +497,8 @@ const I18N = {
     childName: 'Namn <span class="req">*</span>',
     dob: 'Födelsedatum <span class="req">*</span>',
     municipality: 'Folkbokföringskommun <span class="req">*</span>',
+    postcode: 'Postnummer',
+    postcodeHint: 'Valfritt — hjälper oss att välja var skolan ska ligga.',
     scenarioIntro: 'Enligt den svenska skollagen ger Italienska Skolan Stockholm prioritet till elever som är bosatta i Sverige under en begränsad tid (primär målgrupp). Välj det alternativ som motsvarar er situation:',
     scenario: 'Scenario <span class="req">*</span>',
     languagesHome: 'Vilka språk talar ni dagligen hemma? (ange alla språk) <span class="req">*</span>',
@@ -504,6 +515,7 @@ const I18N = {
     errEmail: 'Ange en giltig e-postadress.',
     errDob: 'Ange ett fullständigt födelsedatum.',
     errLangs: 'Välj minst ett språk.',
+    errPostcode: 'Ange ett postnummer med 5 siffror (t.ex. 112 34).',
     errConsent: 'Samtycke krävs för att fortsätta.',
     addChildFirst: 'Lägg till minst ett barn.',
     submitError: 'Ett fel uppstod när formuläret skickades. Försök igen eller kontakta skolan.',
@@ -728,6 +740,12 @@ function renumberChildren() {
 }
 
 /* -------- Collect + validate -------- */
+// Swedish postnummer: 5 digits, stored in the usual "123 45" form. Returns '' if not 5 digits.
+function normalizePostcode(v) {
+  const digits = (v || '').replace(/\s+/g, '');
+  return /^\d{5}$/.test(digits) ? digits.slice(0, 3) + ' ' + digits.slice(3) : '';
+}
+
 function collectChildren() {
   return Array.from(childrenEl.querySelectorAll('[data-child]')).map((b) => {
     const val = (f) => { const el = b.querySelector('[data-field="' + f + '"]'); return el ? el.value.trim() : ''; };
@@ -738,6 +756,7 @@ function collectChildren() {
       name: val('name'),
       dob: val('dob'),
       municipality: val('municipality'),
+      postcode: normalizePostcode(val('postcode')),
       scenarioId: scenarioId,
       scenarioLabel: scen ? scen.it : '',      // store the canonical Italian label
       scenarioLabelLocal: scen ? scen[LANG] : '',
@@ -778,6 +797,9 @@ function validate() {
     if (!dobEl.value.trim()) { markInvalid(dobEl, true); firstInvalid = firstInvalid || dobEl; }
     const muniEl = b.querySelector('[data-field="municipality"]');
     if (!muniEl.value.trim()) { markInvalid(muniEl, true); firstInvalid = firstInvalid || muniEl; }
+    // Postnummer is optional — only check the format if something was typed
+    const postEl = b.querySelector('[data-field="postcode"]');
+    if (postEl.value.trim() && !normalizePostcode(postEl.value)) { markInvalid(postEl, true); firstInvalid = firstInvalid || postEl; }
     // Scenario radio required
     if (!b.querySelector('[data-field="scenario"]:checked')) {
       b.querySelector('[data-scenario-group]').closest('.pi-field').classList.add('invalid');
